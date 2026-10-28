@@ -1,0 +1,28 @@
+@model Categoria
+@{
+    ViewData["Title"] = "Nueva categoría";
+}
+
+<section class="panel panel--estrecho">
+    <h1>Nueva categoría</h1>
+    <p class="sub">Aparecerá en los filtros y en el formulario de eventos.</p>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="campo">
+            <label asp-for="Nombre"></label>
+            <input asp-for="Nombre" placeholder="Ej. Deportes" maxlength="50" autofocus />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="formulario__acciones">
+            <button type="submit" class="btn btn--primario">Crear categoría</button>
+            <a class="btn btn--enlace" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

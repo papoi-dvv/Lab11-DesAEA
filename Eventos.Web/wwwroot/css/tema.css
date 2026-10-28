@@ -1,0 +1,85 @@
+/* =====================================================================
+   Modo oscuro: redefine los tokens y ajusta lo que usaba colores pastel fijos.
+   ===================================================================== */
+:root[data-tema="oscuro"] {
+    color-scheme: dark;
+    --fondo: #0f0c1d;
+    --blanco: #1a1630;
+    --texto: #f1edff;
+    --suave: #a9a2c7;
+    --borde: #2d2750;
+    --lila: #241e45;
+    --lila-2: #352c68;
+    --morado: #8b5cf6;
+    --morado-oscuro: #7c3aed;
+    --morado-tinta: #0b0818;
+    --pastilla: #7c4dff;
+    --coral: #ff6b7c;
+    --sup-suave: rgba(255, 255, 255, .08);
+    --pista: rgba(255, 255, 255, .1);
+    --pista-anillo: rgba(255, 255, 255, .12);
+    --topbar-bg: rgba(15, 12, 29, .95);
+    --sombra: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+    --sombra-alta: 0 2px 4px rgba(0, 0, 0, .4), 0 18px 40px rgba(124, 77, 255, .3);
+}
+
+:root[data-tema="oscuro"] .cat-0 { --c-bg: #1b1b45; --c-borde: #2f2f7a; --c-acento: #818cf8; --c-tinta: #c7d2fe; }
+:root[data-tema="oscuro"] .cat-1 { --c-bg: #3a1428; --c-borde: #6b2146; --c-acento: #fb7185; --c-tinta: #fecdd3; }
+:root[data-tema="oscuro"] .cat-2 { --c-bg: #3a2810; --c-borde: #6b4a1a; --c-acento: #fbbf24; --c-tinta: #fde68a; }
+:root[data-tema="oscuro"] .cat-3 { --c-bg: #0f332f; --c-borde: #17584f; --c-acento: #2dd4bf; --c-tinta: #99f6e4; }
+:root[data-tema="oscuro"] .cat-4 { --c-bg: #2b1b4d; --c-borde: #46307f; --c-acento: #a78bfa; --c-tinta: #ddd6fe; }
+:root[data-tema="oscuro"] .cat-5 { --c-bg: #0f2f45; --c-borde: #194d70; --c-acento: #38bdf8; --c-tinta: #bae6fd; }
+
+:root[data-tema="oscuro"] .marca { color: var(--texto); }
+:root[data-tema="oscuro"] .tarjeta .fecha,
+:root[data-tema="oscuro"] .tarjeta-color .fecha,
+:root[data-tema="oscuro"] .linea__fecha { box-shadow: none; border: 1px solid var(--c-borde); }
+:root[data-tema="oscuro"] .tarjeta:hover { box-shadow: 0 2px 4px rgba(0, 0, 0, .4), 0 20px 40px -12px var(--g1); }
+:root[data-tema="oscuro"] .tarjeta--pasada { filter: saturate(.35) brightness(.85); }
+
+/* Chips y textos de color */
+:root[data-tema="oscuro"] .ficha--virtual { background: #0f2f45; color: #7dd3fc; }
+:root[data-tema="oscuro"] .ficha--presencial { background: #3a2810; color: #fbbf24; }
+:root[data-tema="oscuro"] .ficha--ok { background: #0f3326; color: #4ade80; }
+:root[data-tema="oscuro"] .ficha--mal { background: #3a1420; color: #fda4af; }
+:root[data-tema="oscuro"] .ficha--neutra { background: #2a2545; color: #b5aed6; }
+:root[data-tema="oscuro"] .ficha--vidrio { background: rgba(255, 255, 255, .2); }
+:root[data-tema="oscuro"] .precio--gratis { color: #34d399; }
+:root[data-tema="oscuro"] .precio--bajo { color: #22d3ee; }
+:root[data-tema="oscuro"] .precio--medio { color: #a78bfa; }
+:root[data-tema="oscuro"] .precio--alto { color: #fb7185; }
+:root[data-tema="oscuro"] .cuenta { color: var(--c-acento, #a78bfa); }
+:root[data-tema="oscuro"] .cuenta--urgente { color: #fff; }
+
+/* Formularios, tablas y paneles */
+:root[data-tema="oscuro"] .campo input,
+:root[data-tema="oscuro"] .campo select { color: var(--texto); }
+:root[data-tema="oscuro"] .campo input::placeholder { color: #7b749c; }
+:root[data-tema="oscuro"] .input-validation-error { background: #3a1420 !important; }
+:root[data-tema="oscuro"] .input-validation-error + .dd .dd__boton { background: #3a1420; }
+:root[data-tema="oscuro"] .field-validation-error,
+:root[data-tema="oscuro"] .text-danger { color: #fda4af; }
+:root[data-tema="oscuro"] .validation-summary-errors ul { background: #3a1420; color: #fda4af; }
+:root[data-tema="oscuro"] .tabla tbody tr:hover { background: rgba(255, 255, 255, .03); }
+:root[data-tema="oscuro"] .btn--borrar:hover { background: #3a1420; color: #fda4af; }
+:root[data-tema="oscuro"] .toast__icono { background: #0f3326; color: #4ade80; }
+:root[data-tema="oscuro"] .toast--error .toast__icono { background: #3a1420; color: #fda4af; }
+:root[data-tema="oscuro"] .modal__icono { background: #3a1420; color: #fda4af; }
+:root[data-tema="oscuro"] .modal__icono--info { background: var(--lila); color: #a78bfa; }
+:root[data-tema="oscuro"] .drawer__aviso--error { color: #fda4af; }
+:root[data-tema="oscuro"] .fila-asist__estado { color: #4ade80; }
+:root[data-tema="oscuro"] .dd__texto--placeholder { color: #7b749c; }
+:root[data-tema="oscuro"] .dd__item--activo { background: var(--lila); }
+:root[data-tema="oscuro"] .cal__dia--fuera { color: #6b6490; }
+:root[data-tema="oscuro"] .cal__dia--hoy { box-shadow: inset 0 0 0 2px var(--lila-2); color: #a78bfa; }
+:root[data-tema="oscuro"] .btn--blanco { background: #fff; color: #2a0f6b; }
+:root[data-tema="oscuro"] .btn--suave { color: #c4b5fd; }
+:root[data-tema="oscuro"] .tarjeta .btn--suave,
+:root[data-tema="oscuro"] .linea__tarjeta .btn--suave { color: var(--c-acento); }
+:root[data-tema="oscuro"] .btn--enlace { color: var(--suave); }
+:root[data-tema="oscuro"] .btn--enlace:hover { color: var(--texto); background: rgba(255, 255, 255, .07); }
+:root[data-tema="oscuro"] .hero .btn--primario { background: #fff; color: #2a0f6b; }
+:root[data-tema="oscuro"] .segmento__op:hover { color: #c4b5fd; }
+:root[data-tema="oscuro"] .btn--vidrio, :root[data-tema="oscuro"] .btn--vidrio:hover { color: #fff; }
+:root[data-tema="oscuro"] .btn--blanco, :root[data-tema="oscuro"] .btn--blanco:hover { color: #2a0f6b; }
+:root[data-tema="oscuro"] .segmento__op.activo, :root[data-tema="oscuro"] .filtro.activo { color: #fff; }

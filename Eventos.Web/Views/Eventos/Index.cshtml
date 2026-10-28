@@ -1,0 +1,254 @@
+@model EventosIndexVM
+@{
+    ViewData["Title"] = "Eventos";
+    var indice = 0;
+    var grupos = Model.Eventos.GroupBy(i => new { i.Evento.Fecha.Year, i.Evento.Fecha.Month }).ToList();
+    var hayFiltros = Model.CategoriaId is not null || !string.IsNullOrEmpty(Model.Precio);
+    var rangos = new (string Clave, string Texto, string Clase)[]
+    {
+        ("gratis", "Gratis", "precio--gratis"),
+        ("bajo", "Menos de S/ 30", "precio--bajo"),
+        ("medio", "S/ 30 – 99", "precio--medio"),
+        ("alto", "S/ 100 o más", "precio--alto")
+    };
+    var totalSlides = Model.Banners.Count + 1;
+}
+
+<section class="banners" aria-roledescription="carrusel" aria-label="Eventos destacados">
+    <div class="banners__marco">
+        <article class="banner banner--marca banner--activo">
+            <div class="banner__texto">
+                <span class="banner__etiqueta">Bienvenido</span>
+                <h1>Encuentra tu próximo evento</h1>
+                <p>Reserva tu lugar en conferencias, conciertos y encuentros de negocios. Sin filas, sin complicaciones.</p>
+                <div class="banner__acciones">
+                    <a class="btn btn--blanco" asp-action="Create">Crear evento</a>
+                    <a class="btn btn--vidrio" asp-controller="Categorias" asp-action="Index">Ver categorías</a>
+                </div>
+            </div>
+            <span class="banner__orbe" aria-hidden="true"></span>
+        </article>
+
+        @foreach (var b in Model.Banners)
+        {
+            var e = b.Item.Evento;
+            <article class="banner banner--evento @Estilo.Categoria(b.Item.Categoria)" aria-hidden="true">
+                <div class="banner__texto">
+                    <span class="banner__etiqueta">@b.Etiqueta</span>
+                    <h2>@e.Titulo</h2>
+                    <p>@e.Fecha.ToString("dddd dd 'de' MMMM · HH:mm") · @e.Lugar</p>
+                    <div class="banner__datos">
+                        <partial name="_Cuenta" model="e.Fecha" />
+                        <span class="banner__precio">@Estilo.PrecioTexto(e.Precio)</span>
+                        <span class="banner__dato">@b.Item.Cupos cupos</span>
+                    </div>
+                    <div class="banner__acciones">
+                        <button type="button" class="btn btn--blanco" data-inscribir data-evento="@e.Id" data-titulo="@e.Titulo" data-meta="@e.Fecha.ToString("dd/MM/yyyy HH:mm") · @e.Lugar">Inscribir ahora</button>
+                        <a class="btn btn--vidrio" asp-action="Details" asp-route-id="@e.Id">Ver evento</a>
+                    </div>
+                </div>
+                @Estilo.Icono(b.Item.Categoria, "banner__icono-grande")
+            </article>
+        }
+    </div>
+
+    @if (totalSlides > 1)
+    {
+        <button type="button" class="banners__flecha banners__flecha--prev" data-prev aria-label="Banner anterior">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="banners__flecha banners__flecha--next" data-next aria-label="Banner siguiente">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="banners__puntos">
+            @for (var i = 0; i < totalSlides; i++)
+            {
+                <button type="button" class="banners__punto" aria-label="Ir al banner @(i + 1)"><i></i></button>
+            }
+        </div>
+    }
+</section>
+
+<div id="vistas" data-vista="tarjetas">
+    <script>
+        try { document.getElementById('vistas').dataset.vista = localStorage.getItem('vistaEventos') || 'tarjetas'; } catch (e) { }
+    </script>
+
+    <div class="barra-vista">
+        <div class="filtros">
+            <a class="filtro @(Model.CategoriaId is null ? "activo" : "")" asp-action="Index" asp-route-precio="@Model.Precio">Todas</a>
+            @foreach (var c in Model.Categorias)
+            {
+                <a class="filtro @Estilo.Categoria(c.Nombre) @(Model.CategoriaId == c.Id ? "activo" : "")" asp-action="Index" asp-route-categoriaId="@c.Id" asp-route-precio="@Model.Precio"><i class="filtro__punto"></i>@c.Nombre</a>
+            }
+        </div>
+
+        <div class="vista" role="group" aria-label="Tipo de vista">
+            <span class="vista__pastilla"></span>
+            <button type="button" class="vista__op" data-vista="tarjetas">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.5"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.5"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.5"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.5"/></svg>
+                Tarjetas
+            </button>
+            <button type="button" class="vista__op" data-vista="tiempo">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 2v12"/><circle cx="3" cy="4" r="1.2" fill="currentColor"/><circle cx="3" cy="11" r="1.2" fill="currentColor"/><path d="M7 4h7M7 11h7"/></svg>
+                Línea de tiempo
+            </button>
+        </div>
+    </div>
+
+    <div class="precios" role="group" aria-label="Filtrar por precio">
+        <span class="precios__titulo">Precio</span>
+        <a class="precio-chip @(string.IsNullOrEmpty(Model.Precio) ? "activo" : "")" asp-action="Index" asp-route-categoriaId="@Model.CategoriaId">Todos</a>
+        @foreach (var r in rangos)
+        {
+            <a class="precio-chip @r.Clase @(Model.Precio == r.Clave ? "activo" : "")" asp-action="Index" asp-route-categoriaId="@Model.CategoriaId" asp-route-precio="@r.Clave">@r.Texto</a>
+        }
+        @if (hayFiltros)
+        {
+            <a class="precios__limpiar" asp-action="Index">Limpiar filtros</a>
+        }
+    </div>
+
+    @if (!Model.Eventos.Any())
+    {
+        ViewData["Ilustracion"] = hayFiltros ? "busqueda" : "calendario";
+        ViewData["Titulo"] = hayFiltros ? "Ningún evento coincide con tu búsqueda" : "Aún no hay eventos";
+        ViewData["Texto"] = hayFiltros ? "Prueba con otra categoría o rango de precio." : "Crea el primero y empieza a recibir inscripciones.";
+        ViewData["Href"] = hayFiltros ? Url.Action("Index") : Url.Action("Create");
+        ViewData["EnlaceTexto"] = hayFiltros ? "Limpiar filtros" : "Crear evento";
+        <div class="panel"><partial name="_Vacio" /></div>
+    }
+    else
+    {
+        <div class="rejilla vista-tarjetas">
+            @foreach (var item in Model.Eventos)
+            {
+                var e = item.Evento;
+                var pasado = e.Fecha < DateTime.Now;
+                <article class="tarjeta @Estilo.Categoria(item.Categoria) @(pasado ? "tarjeta--pasada" : "")" style="--i:@(indice++)">
+                    <div class="tarjeta__banner">
+                        <div class="fecha">
+                            <b>@e.Fecha.ToString("dd")</b>
+                            <span>@e.Fecha.ToString("MMM").TrimEnd('.')</span>
+                        </div>
+                        <span class="ficha ficha--vidrio">@item.Categoria</span>
+                        @Estilo.Icono(item.Categoria, "banner__icono")
+                    </div>
+
+                    <div class="tarjeta__cuerpo">
+                        <div>
+                            <h3>@e.Titulo</h3>
+                            <div class="meta">@e.Fecha.ToString("HH:mm") · @e.Lugar</div>
+                        </div>
+
+                        <div class="fichas">
+                            <partial name="_Cuenta" model="e.Fecha" />
+                            <span class="ficha @(e.Modalidad == "Virtual" ? "ficha--virtual" : "ficha--presencial")">@e.Modalidad</span>
+                        </div>
+
+                        <partial name="_Aforo" model="item" />
+
+                        <div class="tarjeta__pie">
+                            <span class="precio @Estilo.Precio(e.Precio)">@Estilo.PrecioTexto(e.Precio)</span>
+                            <div class="acciones">
+                                @if (!pasado)
+                                {
+                                    <button type="button" class="btn btn--primario btn--chico" data-inscribir data-evento="@e.Id" data-titulo="@e.Titulo" data-meta="@e.Fecha.ToString("dd/MM/yyyy HH:mm") · @e.Lugar">Inscribir</button>
+                                }
+                                <a class="btn btn--suave btn--chico" asp-action="Details" asp-route-id="@e.Id">Ver</a>
+                                <a class="btn btn--suave btn--chico btn--icono" asp-action="Edit" asp-route-id="@e.Id" aria-label="Editar @e.Titulo" title="Editar">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L5 14H2v-3z"/></svg>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@e.Id" method="post"
+                                      data-confirm-titulo="¿Eliminar este evento?"
+                                      data-confirm-texto="«@e.Titulo» dejará de aparecer en el listado. Podrás deshacerlo justo después."
+                                      data-confirm-boton="Sí, eliminar">
+                                    <button type="submit" class="btn btn--enlace btn--chico btn--icono btn--borrar" aria-label="Eliminar @e.Titulo" title="Eliminar">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5h11M6 4.5V3a1 1 0 011-1h2a1 1 0 011 1v1.5M4 4.5l.6 8.4a1 1 0 001 .9h4.8a1 1 0 001-.9l.6-8.4"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+
+        <div class="linea vista-tiempo">
+            @{ indice = 0; }
+            @foreach (var g in grupos)
+            {
+                var mes = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy");
+                <h2 class="linea__mes">@(char.ToUpper(mes[0]) + mes[1..]) <small>@g.Count() @(g.Count() == 1 ? "evento" : "eventos")</small></h2>
+                <ol class="linea__lista">
+                    @foreach (var item in g)
+                    {
+                        var e = item.Evento;
+                        var pasado = e.Fecha < DateTime.Now;
+                        <li class="linea__item @Estilo.Categoria(item.Categoria) @(pasado ? "tarjeta--pasada" : "")" style="--i:@(indice++)">
+                            <span class="linea__punto">@Estilo.Icono(item.Categoria)</span>
+                            <div class="linea__tarjeta">
+                                <div class="linea__fecha">
+                                    <b>@e.Fecha.ToString("dd")</b>
+                                    <span>@e.Fecha.ToString("ddd").TrimEnd('.')</span>
+                                </div>
+                                <div class="linea__info">
+                                    <h3>@e.Titulo</h3>
+                                    <div class="meta">@e.Fecha.ToString("HH:mm") · @e.Lugar</div>
+                                    <div class="fichas">
+                                        <span class="ficha ficha--cat">@item.Categoria</span>
+                                        <span class="ficha @(e.Modalidad == "Virtual" ? "ficha--virtual" : "ficha--presencial")">@e.Modalidad</span>
+                                        <partial name="_Cuenta" model="e.Fecha" />
+                                        @if (!pasado && item.Cupos == 0)
+                                        {
+                                            <span class="ficha ficha--mal">Agotado</span>
+                                        }
+                                        else if (!pasado)
+                                        {
+                                            <span class="ficha ficha--neutra">@item.Cupos cupos</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="linea__der">
+                                    <span class="precio @Estilo.Precio(e.Precio)">@Estilo.PrecioTexto(e.Precio)</span>
+                                    <div class="acciones">
+                                        @if (!pasado)
+                                        {
+                                            <button type="button" class="btn btn--primario btn--chico" data-inscribir data-evento="@e.Id" data-titulo="@e.Titulo" data-meta="@e.Fecha.ToString("dd/MM/yyyy HH:mm") · @e.Lugar">Inscribir</button>
+                                        }
+                                        <a class="btn btn--suave btn--chico" asp-action="Details" asp-route-id="@e.Id">Ver</a>
+                                        <a class="btn btn--suave btn--chico" asp-action="Edit" asp-route-id="@e.Id">Editar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ol>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/banners.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            var cont = document.getElementById('vistas');
+            function marcar() {
+                cont.querySelectorAll('.vista__op').forEach(function (b) {
+                    var on = b.dataset.vista === cont.dataset.vista;
+                    b.classList.toggle('activo', on);
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            cont.querySelectorAll('.vista__op').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    cont.dataset.vista = b.dataset.vista;
+                    try { localStorage.setItem('vistaEventos', b.dataset.vista); } catch (e) { }
+                    marcar();
+                });
+            });
+            marcar();
+        })();
+    </script>
+}

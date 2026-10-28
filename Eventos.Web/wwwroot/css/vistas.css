@@ -1,0 +1,167 @@
+/* =====================================================================
+   Segundo tono de cada paleta (para degradados)
+   ===================================================================== */
+.cat-0 { --c-2: #8b5cf6; }
+.cat-1 { --c-2: #ff7a59; }
+.cat-2 { --c-2: #f5b82e; }
+.cat-3 { --c-2: #34d399; }
+.cat-4 { --c-2: #e879f9; }
+.cat-5 { --c-2: #38bdf8; }
+
+/* =====================================================================
+   Tarjeta con banner
+   ===================================================================== */
+.tarjeta { padding: 0; gap: 0; overflow: hidden; }
+.tarjeta__cuerpo { display: flex; flex-direction: column; gap: 16px; padding: 20px 22px 22px; flex: 1; }
+.tarjeta__banner {
+    position: relative; overflow: hidden; height: 112px; padding: 16px 18px;
+    display: flex; justify-content: space-between; align-items: flex-start; color: #fff;
+    background: linear-gradient(135deg, var(--g1, var(--morado)), var(--g2, var(--morado)));
+}
+.tarjeta__banner::before {
+    content: ""; position: absolute; inset: 0; opacity: .5;
+    background: radial-gradient(circle at 1.5px 1.5px, rgba(255, 255, 255, .35) 1.5px, transparent 0) 0 0 / 16px 16px;
+    -webkit-mask-image: linear-gradient(120deg, transparent 20%, #000 90%); mask-image: linear-gradient(120deg, transparent 20%, #000 90%);
+}
+.tarjeta__banner > * { position: relative; }
+.banner__icono {
+    position: absolute !important; right: -6px; bottom: -22px; width: 124px; height: 124px;
+    opacity: .26; transform: rotate(-12deg); transition: transform .6s cubic-bezier(.2, .8, .2, 1), opacity .3s;
+}
+.tarjeta:hover .banner__icono { transform: rotate(0) scale(1.12) translateY(-4px); opacity: .4; }
+.ficha--vidrio { background: rgba(255, 255, 255, .24); color: #fff; border: 1px solid rgba(255, 255, 255, .4); }
+.tarjeta__banner .fecha { box-shadow: 0 6px 16px rgba(0, 0, 0, .18); }
+.tarjeta .tarjeta__cabecera { align-items: center; }
+
+/* =====================================================================
+   Selector de vista (tarjetas / línea de tiempo)
+   ===================================================================== */
+.barra-vista { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.barra-vista .filtros { margin-bottom: 0; }
+.vista {
+    position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px;
+    background: var(--blanco); border: 1.5px solid var(--borde); border-radius: 999px;
+}
+.vista__pastilla {
+    position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px;
+    background: var(--morado-tinta); transition: transform .35s cubic-bezier(.3, 1.3, .5, 1);
+}
+#vistas[data-vista="tiempo"] .vista__pastilla { transform: translateX(100%); }
+.vista__op {
+    position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 9px 18px; border: 0; background: transparent; border-radius: 999px; cursor: pointer;
+    font: inherit; font-weight: 700; font-size: .88rem; color: var(--suave); white-space: nowrap; transition: color .25s;
+}
+.vista__op:hover { color: var(--morado); }
+.vista__op.activo, .vista__op.activo:hover { color: #fff; }
+.vista__op:focus-visible { outline: 3px solid rgba(91, 31, 208, .35); outline-offset: 2px; }
+
+#vistas[data-vista="tarjetas"] .vista-tiempo { display: none; }
+#vistas[data-vista="tiempo"] .vista-tarjetas { display: none; }
+
+/* =====================================================================
+   Línea de tiempo
+   ===================================================================== */
+.linea__mes { display: flex; align-items: baseline; gap: 12px; margin: 30px 0 16px; font-size: 1.25rem; font-weight: 800; }
+.linea__mes:first-child { margin-top: 6px; }
+.linea__mes small { font-size: .82rem; font-weight: 600; color: var(--suave); }
+.linea__lista { list-style: none; margin: 0; padding: 0 0 0 44px; position: relative; }
+.linea__lista::before {
+    content: ""; position: absolute; left: 15px; top: 8px; bottom: 8px; width: 2px; border-radius: 2px;
+    background: linear-gradient(var(--borde), var(--lila-2), var(--borde));
+}
+.linea__item { position: relative; margin-bottom: 14px; animation: sube .35s cubic-bezier(.2, .8, .2, 1) both; animation-delay: min(calc(var(--i, 0) * 30ms), 210ms); }
+.linea__punto {
+    position: absolute; left: -44px; top: 50%; width: 32px; height: 32px; margin-top: -16px; border-radius: 50%;
+    display: grid; place-items: center; color: #fff; z-index: 1;
+    background: linear-gradient(135deg, var(--g1), var(--g2)); box-shadow: 0 0 0 5px var(--fondo);
+    transition: transform .3s cubic-bezier(.3, 1.6, .5, 1);
+}
+.linea__punto svg { width: 16px; height: 16px; }
+.linea__item:hover .linea__punto { transform: scale(1.2) rotate(-8deg); }
+.linea__tarjeta {
+    display: grid; grid-template-columns: 70px 1fr auto; gap: 20px; align-items: center; padding: 16px 20px;
+    background: var(--c-bg); border: 1px solid var(--c-borde); border-left: 5px solid var(--c-acento); border-radius: 20px;
+    box-shadow: var(--sombra); transition: transform .2s cubic-bezier(.3, 1.4, .5, 1), box-shadow .2s;
+}
+.linea__item:hover .linea__tarjeta { transform: translateX(6px); box-shadow: 0 2px 4px rgba(29, 10, 69, .06), 0 16px 32px -12px var(--c-acento); }
+.linea__fecha { text-align: center; background: var(--blanco); border-radius: 16px; padding: 8px 0; color: var(--c-acento); box-shadow: 0 2px 8px rgba(0, 0, 0, .06); }
+.linea__fecha b { display: block; font-size: 1.6rem; line-height: 1; font-weight: 800; }
+.linea__fecha span { font-size: .72rem; text-transform: uppercase; font-weight: 700; letter-spacing: .06em; }
+.linea__info h3 { font-size: 1.08rem; font-weight: 700; color: var(--c-tinta); }
+.linea__info .fichas { margin-top: 10px; }
+.linea__der { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.linea__tarjeta .btn--suave { background: var(--sup-suave); color: var(--c-acento); }
+.linea__tarjeta .btn--suave:hover { background: var(--blanco); color: var(--c-tinta); }
+
+@media (max-width: 760px) {
+    .linea__tarjeta { grid-template-columns: 56px 1fr; gap: 14px; }
+    .linea__der { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+    .linea__lista { padding-left: 38px; }
+    .linea__punto { left: -38px; width: 28px; height: 28px; margin-top: -14px; }
+    .linea__lista::before { left: 13px; }
+    .vista { width: 100%; }
+}
+
+/* =====================================================================
+   Selector de fecha y hora
+   ===================================================================== */
+.dd--fecha .dd__boton { justify-content: flex-start; }
+.dd--fecha .dd__texto { flex: 1; text-transform: capitalize; }
+.dd__icono { display: grid; color: var(--morado); }
+.cal { padding: 14px; min-width: 320px; right: auto; width: max-content; max-width: calc(100vw - 40px); }
+.cal__cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cal__titulo { font-size: 1rem; font-weight: 800; letter-spacing: -.01em; }
+.cal__nav {
+    width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer;
+    background: var(--lila); color: var(--morado); transition: transform .15s cubic-bezier(.3, 1.6, .5, 1), background .15s;
+}
+.cal__nav:hover { background: var(--lila-2); transform: scale(1.1); }
+.cal__nav:active { transform: scale(.9); }
+.cal__semana, .cal__grilla { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.cal__semana span { text-align: center; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--suave); padding: 4px 0; }
+.cal__grilla--anim { animation: aparece .25s ease; }
+@keyframes aparece { from { opacity: 0; transform: translateY(6px); } }
+.cal__dia {
+    aspect-ratio: 1; min-width: 40px; border: 0; border-radius: 50%; background: transparent; color: var(--texto);
+    font: inherit; font-weight: 600; font-size: .92rem; cursor: pointer; position: relative;
+    transition: background .12s, transform .15s cubic-bezier(.3, 1.6, .5, 1), color .12s;
+}
+.cal__dia:hover { background: var(--lila); transform: scale(1.1); }
+.cal__dia:active { transform: scale(.92); }
+.cal__dia--fuera { color: #b4adc9; font-weight: 500; }
+.cal__dia--hoy { box-shadow: inset 0 0 0 2px var(--lila-2); color: var(--morado); }
+.cal__dia--elegido, .cal__dia--elegido:hover {
+    background: var(--morado); color: #fff; box-shadow: 0 6px 14px -4px rgba(91, 31, 208, .6); animation: pop .3s cubic-bezier(.3, 1.8, .5, 1);
+}
+@keyframes pop { from { transform: scale(.7); } }
+.cal__dia:focus-visible { outline: 3px solid rgba(91, 31, 208, .4); outline-offset: 1px; }
+
+.cal__hora { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--borde); }
+.cal__hora-titulo { display: flex; justify-content: space-between; align-items: baseline; font-size: .75rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: var(--suave); margin-bottom: 8px; }
+.cal__hora-valor { font-size: 1.15rem; letter-spacing: -.01em; color: var(--morado); text-transform: none; }
+.cal__columnas { display: flex; align-items: center; gap: 8px; }
+.cal__dos { font-weight: 800; color: var(--suave); }
+.cal__col {
+    flex: 1; height: 132px; overflow-y: auto; scroll-behavior: smooth; padding: 4px; border-radius: 14px; background: var(--fondo);
+    scrollbar-width: thin; display: flex; flex-direction: column; gap: 2px;
+}
+.cal__opcion {
+    flex: none; padding: 7px 0; border: 0; border-radius: 10px; background: transparent; font: inherit; font-weight: 600; font-size: .9rem;
+    color: var(--texto); cursor: pointer; transition: background .12s, transform .12s;
+}
+.cal__opcion:hover { background: var(--lila-2); }
+.cal__opcion:active { transform: scale(.94); }
+.cal__opcion--elegida, .cal__opcion--elegida:hover { background: var(--morado); color: #fff; }
+.cal__pie { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+.cal__texto-btn {
+    border: 0; background: transparent; font: inherit; font-weight: 700; color: var(--morado); cursor: pointer;
+    padding: 8px 12px; border-radius: 999px; transition: background .15s, transform .12s;
+}
+.cal__texto-btn:hover { background: var(--lila); }
+.cal__texto-btn:active { transform: scale(.94); }
+
+@media (max-width: 420px) {
+    .cal { min-width: 0; width: 100%; }
+    .cal__dia { min-width: 0; }
+}

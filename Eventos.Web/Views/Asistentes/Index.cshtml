@@ -1,0 +1,48 @@
+@model List<Asistente>
+@{
+    ViewData["Title"] = "Asistentes";
+}
+
+<div class="encabezado">
+    <div>
+        <h1>Asistentes</h1>
+        <p>@Model.Count personas registradas</p>
+    </div>
+    <a class="btn btn--primario" asp-action="Create">Nuevo asistente</a>
+</div>
+
+@if (!Model.Any())
+{
+    ViewData["Ilustracion"] = "personas";
+    ViewData["Titulo"] = "Aún no hay asistentes";
+    ViewData["Texto"] = "Registra a la primera persona para poder inscribirla en un evento.";
+    ViewData["Href"] = Url.Action("Create");
+    ViewData["EnlaceTexto"] = "Registrar asistente";
+    <div class="panel"><partial name="_Vacio" /></div>
+}
+else
+{
+    <div class="tabla-caja">
+        <table class="tabla">
+            <thead>
+                <tr><th>Asistente</th><th>DNI</th><th>Correo</th><th>Teléfono</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="persona">
+                                <span class="avatar">@(string.Concat(a.Nombres.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(p => p[0])).ToUpper())</span>
+                                @a.Nombres
+                            </div>
+                        </td>
+                        <td>@a.Dni</td>
+                        <td>@a.Correo</td>
+                        <td>@(string.IsNullOrWhiteSpace(a.Telefono) ? "—" : a.Telefono)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

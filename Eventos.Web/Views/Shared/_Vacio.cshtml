@@ -1,0 +1,50 @@
+@* Estado vacío con ilustración. ViewData: Ilustracion (calendario|personas|ticket|etiqueta|busqueda), Titulo, Texto, Href, EnlaceTexto *@
+@{
+    var ilu = ViewData["Ilustracion"] as string ?? "calendario";
+}
+<div class="vacio-ilu">
+    <svg class="vacio-ilu__dibujo" viewBox="0 0 200 150" fill="none" aria-hidden="true">
+        <ellipse cx="100" cy="132" rx="62" ry="8" class="ilu-sombra" />
+        @switch (ilu)
+        {
+            case "personas":
+                <circle cx="70" cy="62" r="20" class="ilu-a" />
+                <path d="M34 120c0-22 16-36 36-36s36 14 36 36z" class="ilu-a" />
+                <circle cx="132" cy="68" r="16" class="ilu-b" />
+                <path d="M104 120c0-18 12-30 28-30s28 12 28 30z" class="ilu-b" />
+                <circle cx="152" cy="34" r="7" class="ilu-c" />
+                break;
+            case "ticket":
+                <path d="M30 48h140a8 8 0 018 8v14a12 12 0 000 24v14a8 8 0 01-8 8H30a8 8 0 01-8-8V94a12 12 0 000-24V56a8 8 0 018-8z" class="ilu-a" />
+                <path d="M128 52v68" stroke-dasharray="5 5" class="ilu-linea" />
+                <path d="M52 78h48M52 94h32" class="ilu-linea ilu-linea--gruesa" />
+                <path d="M150 74l3.5 7 7.5 1-5.5 5.2 1.4 7.6-6.9-3.8-6.9 3.8 1.4-7.6-5.5-5.2 7.5-1z" class="ilu-c" />
+                break;
+            case "etiqueta":
+                <path d="M30 70L84 28h62a10 10 0 0110 10v62a10 10 0 01-10 10H84L30 70z" class="ilu-a" transform="translate(6 6)" />
+                <circle cx="132" cy="54" r="8" class="ilu-c" />
+                <path d="M72 70h50M72 88h34" class="ilu-linea ilu-linea--gruesa" />
+                break;
+            case "busqueda":
+                <circle cx="90" cy="68" r="38" class="ilu-a" />
+                <circle cx="90" cy="68" r="26" class="ilu-fondo" />
+                <path d="M118 96l34 30" stroke-width="12" stroke-linecap="round" class="ilu-trazo" />
+                <path d="M78 68h24" class="ilu-linea ilu-linea--gruesa" />
+                break;
+            default:
+                <rect x="38" y="30" width="124" height="94" rx="14" class="ilu-a" />
+                <path d="M38 52h124v-8a14 14 0 00-14-14H52a14 14 0 00-14 14z" class="ilu-b" />
+                <path d="M68 22v16M132 22v16" stroke-width="7" stroke-linecap="round" class="ilu-trazo" />
+                <circle cx="70" cy="76" r="6" class="ilu-fondo" /><circle cx="100" cy="76" r="6" class="ilu-fondo" /><circle cx="130" cy="76" r="6" class="ilu-c" />
+                <circle cx="70" cy="102" r="6" class="ilu-fondo" /><circle cx="100" cy="102" r="6" class="ilu-fondo" />
+                <circle cx="168" cy="40" r="9" class="ilu-c" />
+                break;
+        }
+    </svg>
+    <h3>@ViewData["Titulo"]</h3>
+    <p>@ViewData["Texto"]</p>
+    @if (ViewData["Href"] is string href)
+    {
+        <a class="btn btn--primario" href="@href">@ViewData["EnlaceTexto"]</a>
+    }
+</div>

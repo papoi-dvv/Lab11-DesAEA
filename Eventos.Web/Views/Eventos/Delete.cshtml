@@ -1,0 +1,32 @@
+@model Evento
+@{
+    ViewData["Title"] = "Eliminar evento";
+}
+
+<section class="panel panel--estrecho">
+    <h1>¿Eliminar este evento?</h1>
+    <p class="sub">Dejará de aparecer en el listado. Las inscripciones existentes se conservan.</p>
+
+    <div class="tarjeta @Estilo.Categoria(Model.Categoria?.Nombre ?? "")" style="box-shadow:none">
+        <div class="tarjeta__cuerpo">
+            <div class="tarjeta__cabecera">
+                <div class="fecha">
+                    <b>@Model.Fecha.ToString("dd")</b>
+                    <span>@Model.Fecha.ToString("MMM").TrimEnd('.')</span>
+                </div>
+                <div>
+                    <h3>@Model.Titulo</h3>
+                    <div class="meta">@Model.Fecha.ToString("HH:mm") · @Model.Lugar</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="formulario__acciones">
+            <button type="submit" class="btn btn--peligro">Sí, eliminar</button>
+            <a class="btn btn--enlace" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
+</section>

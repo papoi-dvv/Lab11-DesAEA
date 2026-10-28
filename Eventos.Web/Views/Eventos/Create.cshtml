@@ -1,0 +1,21 @@
+@model Evento
+@{
+    ViewData["Title"] = "Nuevo evento";
+}
+
+<section class="panel panel--estrecho">
+    <h1>Nuevo evento</h1>
+    <p class="sub">Completa los datos para publicar el evento.</p>
+
+    <form asp-action="Create" method="post">
+        <partial name="_Formulario" model="Model" />
+        <div class="formulario__acciones">
+            <button type="submit" class="btn btn--primario">Crear evento</button>
+            <a class="btn btn--enlace" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

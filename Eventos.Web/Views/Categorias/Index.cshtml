@@ -1,0 +1,48 @@
+@model List<Categoria>
+@{
+    ViewData["Title"] = "Categorías";
+    var conteo = (Dictionary<int, int>)ViewBag.Conteo;
+    var indice = 0;
+}
+
+<div class="encabezado">
+    <div>
+        <h1>Categorías</h1>
+        <p>Cada categoría le da su propio color e ícono a sus eventos.</p>
+    </div>
+    <a class="btn btn--primario" asp-action="Create">Nueva categoría</a>
+</div>
+
+@if (!Model.Any())
+{
+    ViewData["Ilustracion"] = "etiqueta";
+    ViewData["Titulo"] = "No hay categorías";
+    ViewData["Texto"] = "Crea una categoría para poder organizar tus eventos.";
+    ViewData["Href"] = Url.Action("Create");
+    ViewData["EnlaceTexto"] = "Crear categoría";
+    <div class="panel"><partial name="_Vacio" /></div>
+}
+else
+{
+    <div class="rejilla rejilla--chica">
+        @foreach (var c in Model)
+        {
+            var total = conteo.TryGetValue(c.Id, out var n) ? n : 0;
+            <article class="cat-tarjeta @Estilo.Categoria(c.Nombre)" style="--i:@(indice++)">
+                <span class="cat-tarjeta__icono">@Estilo.Icono(c.Nombre)</span>
+                <div class="cat-tarjeta__texto">
+                    <h3>@c.Nombre</h3>
+                    <p>@total @(total == 1 ? "evento" : "eventos")</p>
+                </div>
+                <form asp-action="Delete" asp-route-id="@c.Id" method="post"
+                      data-confirm-titulo="¿Eliminar la categoría «@c.Nombre»?"
+                      data-confirm-texto="Dejará de aparecer en los filtros y formularios. Los eventos existentes se conservan. Podrás deshacerlo justo después."
+                      data-confirm-boton="Sí, eliminar">
+                    <button type="submit" class="btn btn--enlace btn--chico btn--icono btn--borrar" aria-label="Eliminar @c.Nombre" title="Eliminar">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5h11M6 4.5V3a1 1 0 011-1h2a1 1 0 011 1v1.5M4 4.5l.6 8.4a1 1 0 001 .9h4.8a1 1 0 001-.9l.6-8.4"/></svg>
+                    </button>
+                </form>
+            </article>
+        }
+    </div>
+}

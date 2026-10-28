@@ -1,0 +1,44 @@
+@model EventoLista
+@{
+    var e = Model.Evento;
+    ViewData["Title"] = e.Titulo;
+    var pasado = e.Fecha < DateTime.Now;
+}
+
+<div class="encabezado">
+    <div>
+        <a class="btn btn--enlace btn--chico" asp-action="Index">← Volver a eventos</a>
+    </div>
+</div>
+
+<div class="detalle">
+    <section class="panel tarjeta-color @Estilo.Categoria(Model.Categoria)">
+        <div class="fichas">
+            <span class="ficha ficha--cat">@Model.Categoria</span>
+            <span class="ficha @(e.Modalidad == "Virtual" ? "ficha--virtual" : "ficha--presencial")">@e.Modalidad</span>
+            <partial name="_Cuenta" model="e.Fecha" />
+        </div>
+        <h1 style="margin-top:14px">@e.Titulo</h1>
+
+        <div class="datos">
+            <div class="dato"><small>Fecha</small><span>@e.Fecha.ToString("dddd dd 'de' MMMM, yyyy")</span></div>
+            <div class="dato"><small>Hora</small><span>@e.Fecha.ToString("HH:mm")</span></div>
+            <div class="dato"><small>Lugar</small><span>@e.Lugar</span></div>
+            <div class="dato"><small>Precio</small><span class="precio @Estilo.Precio(e.Precio)">@Estilo.PrecioTexto(e.Precio)</span></div>
+        </div>
+
+        <div class="acciones">
+            @if (!pasado)
+            {
+                <button type="button" class="btn btn--primario" data-inscribir data-evento="@e.Id" data-titulo="@e.Titulo" data-meta="@e.Fecha.ToString("dd/MM/yyyy HH:mm") · @e.Lugar">Inscribir asistente</button>
+            }
+            <a class="btn btn--suave" asp-action="Edit" asp-route-id="@e.Id">Editar</a>
+        </div>
+    </section>
+
+    <aside class="panel">
+        <h3>Disponibilidad</h3>
+        <p class="sub" style="margin-top:6px">Aforo total: @e.Aforo personas</p>
+        <partial name="_Aforo" model="Model" />
+    </aside>
+</div>

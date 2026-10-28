@@ -1,0 +1,57 @@
+@model List<Inscripcion>
+@{
+    ViewData["Title"] = "Inscripciones";
+}
+
+<div class="encabezado">
+    <div>
+        <h1>Inscripciones</h1>
+        <p>@Model.Count(i => i.Estado == Inscripcion.Confirmada) confirmadas · @Model.Count(i => i.Estado == Inscripcion.Cancelada) canceladas</p>
+    </div>
+    <a class="btn btn--primario" asp-action="Create">Nueva inscripción</a>
+</div>
+
+@if (!Model.Any())
+{
+    ViewData["Ilustracion"] = "ticket";
+    ViewData["Titulo"] = "Todavía no hay inscripciones";
+    ViewData["Texto"] = "Inscribe al primer asistente a un evento y aparecerá aquí.";
+    ViewData["Href"] = Url.Action("Create");
+    ViewData["EnlaceTexto"] = "Nueva inscripción";
+    <div class="panel"><partial name="_Vacio" /></div>
+}
+else
+{
+    <div class="tabla-caja">
+        <table class="tabla">
+            <thead>
+                <tr><th>Evento</th><th>Asistente</th><th>Fecha</th><th>Estado</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model)
+                {
+                    <tr>
+                        <td>
+                            <b>@i.Evento!.Titulo</b>
+                            <span class="sec">@i.Evento.Fecha.ToString("dd/MM/yyyy HH:mm")</span>
+                        </td>
+                        <td>@i.Asistente!.Nombres<span class="sec">DNI @i.Asistente.Dni</span></td>
+                        <td>@i.FechaInscripcion.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td><span class="ficha @(i.Estado == Inscripcion.Confirmada ? "ficha--ok" : "ficha--mal")">@i.Estado</span></td>
+                        <td style="text-align:right">
+                            @if (i.Estado == Inscripcion.Confirmada)
+                            {
+                                <form asp-action="Cancelar" asp-route-id="@i.Id" method="post"
+                                      data-confirm-titulo="¿Cancelar esta inscripción?"
+                                      data-confirm-texto="@i.Asistente.Nombres dejará de estar inscrito en «@i.Evento.Titulo». Podrás deshacerlo justo después."
+                                      data-confirm-boton="Sí, cancelar">
+                                    <button type="submit" class="btn btn--suave btn--chico">Cancelar</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

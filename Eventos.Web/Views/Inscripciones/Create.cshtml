@@ -1,0 +1,38 @@
+@model Inscripcion
+@{
+    ViewData["Title"] = "Nueva inscripción";
+}
+
+<section class="panel panel--estrecho">
+    <h1>Nueva inscripción</h1>
+    <p class="sub">Reserva un cupo para un asistente en un evento.</p>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="campo">
+            <label asp-for="EventoId"></label>
+            <select asp-for="EventoId" asp-items="(SelectList)ViewBag.Eventos" data-dropdown>
+                <option value="">Selecciona un evento</option>
+            </select>
+            <span asp-validation-for="EventoId" class="text-danger"></span>
+        </div>
+
+        <div class="campo">
+            <label asp-for="AsistenteId"></label>
+            <select asp-for="AsistenteId" asp-items="(SelectList)ViewBag.Asistentes" data-dropdown="persona">
+                <option value="">Selecciona un asistente</option>
+            </select>
+            <span asp-validation-for="AsistenteId" class="text-danger"></span>
+        </div>
+
+        <div class="formulario__acciones">
+            <button type="submit" class="btn btn--primario">Confirmar inscripción</button>
+            <a class="btn btn--enlace" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

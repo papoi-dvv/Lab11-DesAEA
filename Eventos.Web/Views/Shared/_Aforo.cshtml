@@ -1,0 +1,20 @@
+@model EventoLista
+@{
+    var pct = Model.PorcentajeOcupado;
+    var ultimos = Model.Cupos > 0 && (Model.Cupos <= 5 || pct >= 90);
+    var estado = pct >= 100 ? "aforo--lleno" : pct >= 80 ? "aforo--alto" : "";
+}
+<div class="aforo @estado @(ultimos ? "aforo--ultimos" : "")" data-aforo-evento="@Model.Evento.Id">
+    <div class="anillo" aria-hidden="true">
+        <svg viewBox="0 0 44 44">
+            <circle class="anillo__pista" cx="22" cy="22" r="18" pathLength="100" />
+            <circle class="anillo__valor" cx="22" cy="22" r="18" pathLength="100" style="stroke-dasharray:100;stroke-dashoffset:@(100 - pct)" />
+        </svg>
+        <b class="anillo__pct">@(pct)%</b>
+    </div>
+    <div class="aforo__texto">
+        <span><b data-cupos>@Model.Cupos</b> cupos disponibles</span>
+        <small><span data-inscritos>@Model.Inscritos</span> inscritos de @Model.Evento.Aforo</small>
+    </div>
+    <span class="aforo__aviso">@(Model.Cupos == 0 ? "Agotado" : ultimos ? $"¡Quedan {Model.Cupos}!" : "")</span>
+</div>

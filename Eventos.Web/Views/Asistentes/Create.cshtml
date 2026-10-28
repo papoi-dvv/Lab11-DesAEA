@@ -1,0 +1,47 @@
+@model Asistente
+@{
+    ViewData["Title"] = "Nuevo asistente";
+}
+
+<section class="panel panel--estrecho">
+    <h1>Nuevo asistente</h1>
+    <p class="sub">Registra a la persona que asistirá a tus eventos.</p>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="campo">
+            <label asp-for="Nombres"></label>
+            <input asp-for="Nombres" placeholder="Nombres y apellidos" />
+            <span asp-validation-for="Nombres" class="text-danger"></span>
+        </div>
+
+        <div class="fila2">
+            <div class="campo">
+                <label asp-for="Dni"></label>
+                <input asp-for="Dni" inputmode="numeric" maxlength="8" placeholder="8 dígitos" />
+                <span asp-validation-for="Dni" class="text-danger"></span>
+            </div>
+            <div class="campo">
+                <label asp-for="Telefono"></label>
+                <input asp-for="Telefono" inputmode="tel" maxlength="9" placeholder="Opcional" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label asp-for="Correo"></label>
+            <input asp-for="Correo" type="email" placeholder="nombre@correo.com" />
+            <span asp-validation-for="Correo" class="text-danger"></span>
+        </div>
+
+        <div class="formulario__acciones">
+            <button type="submit" class="btn btn--primario">Registrar asistente</button>
+            <a class="btn btn--enlace" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

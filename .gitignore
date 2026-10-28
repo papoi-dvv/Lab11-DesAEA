@@ -1,0 +1,36 @@
+# Compilación
+bin/
+obj/
+publish/
+*.dll
+*.pdb
+
+# Editores e IDEs
+.vs/
+.vscode/
+.idea/
+.claude/
+*.user
+*.suo
+*.rsuo
+*.userprefs
+
+# Registros y temporales
+*.log
+*.tmp
+*.cache
+TestResults/
+
+# Secretos y configuración local
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+*.env
+
+# Sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Evidencias locales (capturas del informe)
+evidencias/
